@@ -1,35 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import axios from "axios";
+import { UserContext } from "../UserContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const { setUserInfo } = useContext(UserContext);
 
-  const login = async (ev) => {
-    ev.preventDefault();
-
+  const login = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:4000/login",
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await fetch("http://localhost:4000/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
 
-      if (response.status === 200) {
-        alert("Login success");
+      if (response.ok) {
+        const userInfo = await response.json();
+        setUserInfo(userInfo);
         setRedirect(true);
       } else {
-        alert("Wrong credentials");
+        const errorInfo = await response.json();
+        alert(`Login failed: ${errorInfo.message}`);
       }
     } catch (error) {
       console.error("Error during login:", error);

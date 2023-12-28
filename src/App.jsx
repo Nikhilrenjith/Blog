@@ -7,19 +7,21 @@ import Signup from "./Auth/Signup";
 import Createpost from "./Post/Createpost";
 import Editpost from "./Post/Editpost";
 import Uploadpost from "./Post/Uploadpost";
-
+import { UserContextProvider } from "./UserContext";
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="/login" element={<Login />} />
-        <Route index element={<Homepage />} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/create" element={<Createpost />} />
-        <Route path="/post/:id" element={<Uploadpost />} />
-        <Route path="/edit/:id" element={<Editpost />} />
-      </Route>
-    </Routes>
+    <UserContextProvider>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/login" element={<Login />} />
+          <Route index element={<Homepage />} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/create" element={<Createpost />} />
+          <Route path="/post/:id" element={<Uploadpost />} />
+          <Route path="/edit/:id" element={<Editpost />} />
+        </Route>
+      </Routes>
+    </UserContextProvider>
   );
 };
 
